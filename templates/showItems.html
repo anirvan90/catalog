@@ -1,0 +1,10 @@
+<body>
+	<h1>{{category.name}}</h1>
+
+	{% for i in item %}
+	<ul>	
+		{{i.name}}
+	</ul>
+	{% endfor %}	
+<a href='{{url_for('showCategories')}}'>Return</a>
+</body>
