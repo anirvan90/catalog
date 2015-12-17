@@ -1,4 +1,4 @@
-from sqlalchemy import create engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from database_setup import Category, Item, Base
@@ -64,11 +64,11 @@ category5 = Category(name = 'Jackets & Coats')
 session.add(category5)
 session.commit()
 
-item1 = Item(name = 'Mountain Hardware Ghost Whisperer', description = 'Incredibly ultralight, this full-featured men''s jacket with Q.Shield™ 800-fill-power down resists moisture and retains critical loft even when wet.', category = category5)
+item1 = Item(name = 'Mountain Hardware Ghost Whisperer', description = 'Incredibly ultralight, this full-featured men''s jacket with Q.Shield 800-fill-power down resists moisture and retains critical loft even when wet.', category = category5)
 session.add(item1)
 session.commit()
 
-item2 = Item(name = 'Patagonia Adze Hybrid', description = 'For high-energy activity in cold, windy conditions, the Adze Hybrid Jacket combines fleece-lined Polartec® Windbloc® stretch-woven fabric with breathable and stretchy side panels for insulated protection without overheating.', category = category5)
+item2 = Item(name = 'Patagonia Adze Hybrid', description = 'For high-energy activity in cold, windy conditions, the Adze Hybrid Jacket combines fleece-lined Polartec Windbloc stretch-woven fabric with breathable and stretchy side panels for insulated protection without overheating.', category = category5)
 session.add(item2)
 session.commit()
 
