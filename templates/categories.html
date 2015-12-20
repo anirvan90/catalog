@@ -1,9 +1,22 @@
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<div class="container">
 <body>
 	<h1>Categories</h1>
+	<a href="{{url_for('newCategory')}}">Add New Category</a>
+	<div class="row">
 	{% for i in categories %}
-	<ul>
-		{{i.name}}
-
-	</ul>
+	<div class="col-md-8">
+		<a href='{{url_for('showItems', category_id=i.id)}}'>{{i.name}}</a>
+	</div>
+	<div class="col-md-2">	
+		<a href='{{url_for('editCategory', category_id=i.id)}}'>Edit</a>
+	</div>
+	<div class="col-md-2">	
+		<a href='{{url_for('deleteCategory', category_id=i.id)}}'>Delete</a>
+	</div>
 	{% endfor %}
+</div>
 </body>
+</div>

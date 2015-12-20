@@ -1,0 +1,19 @@
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<div class="container">
+<body>
+	<h2>New Item</h2>
+	<form enctype='multipart/form-data' action='{{url_for('newItem', category_id=category_id)}}', method='post'>
+		<dl>
+			<dt>Name:</dt>
+				<dd><input type='text', size='30', name='name', required></dd>
+			<dt>Description:</dt>
+				<dd><input type='text', size='30', name='description', required></dd>
+		</dl>
+		<input type='submit', value='Create'>
+		<a href='{{url_for('showItems', category_id=category_id)}}'>Back to Items</a>
+
+	</form>
+</body>
+</div>
