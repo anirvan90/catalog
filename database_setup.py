@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, Integer, ForeignKey, String
+from sqlalchemy import Column, Integer, ForeignKey, String, LargeBinary
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm	import relationship
 from sqlalchemy import create_engine
@@ -38,13 +38,11 @@ class Item(Base):
 	def serialize(self):
 
 		return {
-			'name': self.name,
 			'description': self.description,
+			'category_id': self.category_id,
 			'id': self.id,
-			'category': self.category
+			'name': self.name,
 		}
 
 engine = create_engine('sqlite:///itemcatalog.db')
 Base.metadata.create_all(engine)
-
-print "DB Created"
