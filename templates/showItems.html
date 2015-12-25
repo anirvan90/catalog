@@ -9,14 +9,16 @@
 	<a href='{{url_for('newItem', category_id=category.id)}}'>Add New Item</a>
 	{% for i in item %}
 	<ul>	
-		{{i.name}}
+		<h4>{{i.name}}</h4>
 	</br>
-		{{i.description}}
+		<h6>{{i.description}}</h6>
 	</ul>
 	<a href="{{url_for('editItem', category_id=category.id, item_id=i.id)}}">Edit</a>
 	<a href="{{url_for('deleteItem', category_id=category.id, item_id=i.id)}}">Delete</a>
 	{% endfor %}
-	</br>	
+	</br>
+	<div class="row text-center">	
 <a href='{{url_for('showCategories')}}'>Return</a>
+</div>
 </body>
 </div>
