@@ -2,6 +2,7 @@ import os
 import sys
 from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_imageattach.entity import Image, image_attachment
 from sqlalchemy.orm	import relationship
 from sqlalchemy import create_engine
 
