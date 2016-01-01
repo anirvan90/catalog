@@ -45,5 +45,14 @@ class Item(Base):
 			'name': self.name,
 		}
 
+#Create Table to store Item Images		
+class ItemImage(Base, Image):
+	__tablename__='item_image'
+
+	item_id = Column(Integer, ForeignKey('item.id'), primary_key = True)
+	item = relationship(Item)
+
+
+
 engine = create_engine('sqlite:///itemcatalog.db')
 Base.metadata.create_all(engine)
