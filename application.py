@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, redirect, request, jsonify
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Category, Item, Base
+from database_setup import Category, Item, ItemImage, Base
 
 app = Flask(__name__)
 
