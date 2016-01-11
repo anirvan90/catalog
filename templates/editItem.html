@@ -1,8 +1,5 @@
-<head>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-</head>
-<div class="container">
-<body>
+{% extends "main.html" %}
+{% block content %}
 	<h2>Edit "{{item.name}}"</h2>
 	<form action='{{url_for('editItem', category_id=category_id, item_id = item.id)}}', method = 'post'>
 	<dl>
@@ -15,5 +12,4 @@
 	<input type='submit', value='Edit'>
 	<a href='{{url_for('showItems', category_id=category_id)}}'>Cancel</a> 
 	</form>
-</body>
-</div>
+{% endblock %}

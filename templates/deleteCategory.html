@@ -1,13 +1,11 @@
-<head>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-</head>
-<div class="container">
-<body>
+{% extends "main.html" %}
+{% block content %}
+
 	<h2>Are you sure you want to delete {{i.name}}?</h2>
 	<form action='{{ url_for('deleteCategory', category_id=i.id)}}', method='post'>
 		<input type='submit', value='Delete'>
 	</form>
 	<a href='{{url_for('showCategories')}}'>Cancel</a>
 
-</body>
-</div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+{% block content %}
+		<h1>{{category.name}}</h1>
+			<div class='row'>
+	<div class='col-md-2'>
+	</div>
+	<div class='col-md-10'>	
+		<h4>{{item.name}}</h4>
+	</br>
+		<h6>{{item.description}}</h6>
+	<a href="{{url_for('editItem', category_id=category.id, item_id=item.id)}}">Edit</a>
+	<a href="{{url_for('deleteItem', category_id=category.id, item_id=item.id)}}">Delete</a>
+	</div>
+{% endblock %}
