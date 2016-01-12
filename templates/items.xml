@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<author>
+		<name>Anirvan Awatramani</name>
+	</author>
+	<title type="text">Outdoor Gear Catalog Categories</title>
+	{% for item in items %}
+	<entry>
+		<title type="text">{{category.name}}</title>
+		<summary type="xhtml">
+			<div xmlns="http://www.w3.org/1999/xhtml">
+				<p>Item ID: <item_id>{{item.id}}</item_id></p>
+				<p>Name: <item_name>{{item.name}}</item_name></p>
+				<p>Description: <item_desc>{{item.description}}</item_desc></p>
+			</div>
+		</summary>
+	</entry>
+	{% endfor %}
+</feed>

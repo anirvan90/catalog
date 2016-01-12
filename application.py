@@ -16,8 +16,13 @@ import httplib2
 import json
 from flask import make_response
 import requests
+import sys
+import logging
 
 app = Flask(__name__)
+
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 CLIENT_ID = json.loads(
 	open('client_secrets.json', 'r').read())['web']['client_id']
@@ -25,7 +30,7 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Catalog App"
 
 #Connect to DB
-engine = create_engine('sqlite:///itemcatalogwithusers.db')
+engine = create_engine('postgres://nbrdfikhplpwoi:3-GoHXjocuGOmxJL4VrwxVusfu@ec2-54-83-52-144.compute-1.amazonaws.com:5432/dam7n2m3mdhpo9')
 Base.metadata.bind = engine
 
 
@@ -394,20 +399,42 @@ def deleteItem(category_id, item_id):
 		return render_template('deleteItem.html', category_id=category_id,
 			item=itemToDelete)
 
+#Create a JSON endpoint for all categories
 @app.route('/categories/JSON/')
 def showCategoriesJSON():
 	categories = session.query(Category).all()
 	return jsonify(Category=[i.serialize for i in categories])
 
+#Create a JSON endpoint for items in a single category
 @app.route('/category/<int:category_id>/item/JSON/')
 def showItemsJSON(category_id):
 	items = session.query(Item).filter_by(category_id=category_id)
 	return jsonify(Item = [i.serialize for i in items])
 
+#Create a JSON endpoint for a single item
 @app.route('/category/<int:category_id>/item/<int:item_id>/JSON/')
 def showSingleItemJSON(category_id, item_id):
 	item = session.query(Item).filter_by(id=item_id).one()
 	return jsonify(Item = item.serialize)
+
+#Create an Atom format XML endpoint for all categories
+@app.route('/categories/XML/')
+def showCategoriesXML():
+	categories = session.query(Category).all()
+	return render_template('categories.xml', categories=categories)
+
+#Create an Atom format XML endpoint for all items in one category
+@app.route('/category/<int:category_id>/item/XML/')
+def showItemsXML(category_id):
+	items = session.query(Item).filter_by(category_id=category_id)
+	category = session.query(Category).filter_by(id=category_id).one()
+	return render_template('items.xml', items=items, category=category)
+
+#Create an Atom format XML endpoint for a single item
+@app.route('/category/<int:category_id>/item/<int:item_id>/XML/')
+def showSingleItemXML(category_id, item_id):
+	item = session.query(Item).filter_by(id=item_id).one()
+	return render_template('singleItem.xml', item=item)
 
 #Returns a user id for a registered user email in DB
 def getUserID(email):
@@ -431,8 +458,8 @@ def createUser(login_session):
 	user = session.query(User).filter_by(email=login_session['email']).one()
 	return user.id
 
-if __name__ == '__main__':
-	app.secret_key = 'super_secret_key'
-	app.debug = True
-	app.run(host = '0.0.0.0', port = 8000)
+#if __name__ == '__main__':
+app.secret_key = 'super_secret_key'
+app.debug = True
+#app.run(host = '0.0.0.0', port = 8000)
 

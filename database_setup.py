@@ -24,6 +24,7 @@ class Category(Base):
 	id = Column(Integer, primary_key = True)
 	user_id = Column(Integer, ForeignKey('user.id'))
 	user = relationship(User)
+	item = relationship("Item", cascade="all, delete-orphan")
 
 #Define property to return object in serializable format. 	
 	@property
@@ -65,5 +66,5 @@ class ItemImage(Base, Image):
 
 
 
-engine = create_engine('sqlite:///itemcatalogwithusers.db')
+engine = create_engine('postgres://nbrdfikhplpwoi:3-GoHXjocuGOmxJL4VrwxVusfu@ec2-54-83-52-144.compute-1.amazonaws.com:5432/dam7n2m3mdhpo9')
 Base.metadata.create_all(engine)
