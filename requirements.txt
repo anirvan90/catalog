@@ -3,7 +3,7 @@ Flask==0.10.1
 Flask-HTTPAuth==2.7.0
 Jinja2==2.7.2
 MarkupSafe==0.18
-PAM==0.4.2
+PAM==0.1.4
 PyYAML==3.10
 SQLAlchemy==0.8.4
 SQLAlchemy-ImageAttach==0.9.0
