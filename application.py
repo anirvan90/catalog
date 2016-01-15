@@ -37,10 +37,12 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind = engine)
 session = DBSession()
 
+#ALL OAUTH METHODS
 #Create anti-forgery state token
 @app.route('/')
 @app.route('/login')
 def showLogin():
+	#Create a state token (string) of random uppercase chars and digits
 	state = ''.join(random.choice(string.ascii_uppercase + string.digits)
 				for x in xrange(32))
 	login_session['state'] = state
@@ -270,17 +272,22 @@ def disconnect():
 		flash("You were never logged in!")
 		return redirect(url_for('showCategories'))
 
+#ALL CRUD METHODS
+#Create a route and method to show 'ALL' categories
 @app.route('/categories/')
 def showCategories():
 	categories = session.query(Category).all()
+	#Show public page to users not logged in.
 	if 'username' not in login_session:
 		return render_template('publiccategories.html',
 		 categories = categories)
 	else:
 		return render_template('categories.html', categories = categories)
 
+#Create a route and method to 'ADD/CREATE' a new category.
 @app.route('/category/new/', methods = ['GET', 'POST'])
 def newCategory():
+	#Only authorized users can add new categories.
 	if 'username' not in login_session:
 		return redirect('/login')
 	if request.method == 'POST':
@@ -292,14 +299,21 @@ def newCategory():
 	else:
 		return render_template('newCategory.html')
 
+#Create a route and method to 'EDIT' a category.
 @app.route('/category/<int:category_id>/edit/', methods = ['GET','POST'])
 def editCategory(category_id):
+	#Check if user is logged in.
 	if 'username' not in login_session:
 		return redirect('/login')
 
 	edittedCategory = session.query(Category).filter_by(id=category_id).one()
+	
+	#Check if user is owner of category. 
 	if edittedCategory.user_id != login_session['user_id']:
 		return "<script>function myFunction() {alert('You are not authorized to edit this category. Please create your own category in order to edit.');}</script><body onload='myFunction''>"
+		return redirect(url_for('showCategories'))
+	
+	#If user is owner, edit request will be accepted.
 	if request.method == 'POST':
 		if request.form['name']:
 			edittedCategory.name = request.form['name']
@@ -310,15 +324,21 @@ def editCategory(category_id):
 		return render_template('editCategory.html', category_id = category_id,
 			i = edittedCategory)
 
+#Create a route and method to 'DELETE' a category.
 @app.route('/category/<int:category_id>/delete/', methods = ['GET', 'POST'])
 def deleteCategory(category_id):
+	#Check if user is logged in.
 	if 'username' not in login_session:
 		return redirect('/login')
  	
  	categoryToDelete = session.query(Category).filter_by(id=category_id).one()
+ 	
+ 	#Check if user is owner of category.
  	if categoryToDelete.user_id != login_session['user_id']:
  		return "<script>function myFunction() {alert('You are not authorized to delete this category. Please create your own category in order to delete.');}</script><body onload='myFunction()''>"
  		return redirect(url_for('showCategories'))
+	
+	#If user is owner, Delete request will be accepted.
 	if request.method == 'POST':
 		session.delete(categoryToDelete)
 		session.commit()
@@ -327,13 +347,14 @@ def deleteCategory(category_id):
 		return render_template('deleteCategory.html',
 			category_id = category_id, i = categoryToDelete)
 
+#Create a route and method to show ALL items in a category.
 @app.route('/category/<int:category_id>/')
 @app.route('/category/<int:category_id>/item/')
 def showItems(category_id):
 	category = session.query(Category).filter_by(id=category_id).one()
 	item = session.query(Item).filter_by(category_id=category_id)
 	creator = getUserInfo(category.user_id)
-
+	#Check if user is logged in or if user is owner.
 	if 'username' not in login_session or creator.id != login_session['user_id']:
 		return render_template('showPublicItems.html', category=category,
 			item=item, creator=creator)
@@ -341,12 +362,13 @@ def showItems(category_id):
 		return render_template('showItems.html', category=category,
 			item=item, creator=creator)
 
+#Create a route and method to show ONE item in the category.
 @app.route('/category/<int:category_id>/item/<int:item_id>/')
 def showSingleItem(category_id, item_id):
 	singleItem = session.query(Item).filter_by(id=item_id).one()
 	category = session.query(Category).filter_by(id=singleItem.category_id).one()
 	creator = getUserInfo(category.user_id)
-
+	#Check if user is logged in or user is owner.
 	if 'username' not in login_session or creator.id != login_session['user_id']:
 		return render_template('showPublicSingleItem.html', item=singleItem,
 		 category=category)
@@ -354,12 +376,16 @@ def showSingleItem(category_id, item_id):
 		return render_template('showSingleItem.html', item=singleItem,
 			category=category)
 
+#Create a route and mehtod to 'ADD/CREATE' a new item record.
 @app.route('/category/<int:category_id>/item/new/', methods = ['GET', 'POST'])
 def newItem(category_id):
+	#Check if user is logged in.
 	if 'username' not in login_session:
 		return redirect('/login')
 	
 	category = session.query(Category).filter_by(id=category_id).one()
+	#Check if user is cateogory owner.
+	#Only owners can add items to categories.
 	if login_session['user_id'] != category.user_id:
 		return "<script>function myFunction() {alert('You are not authorized to add items to this category. Please create your own category to add items.');}</script><body onload='myFunction()''>"
 	if request.method == 'POST':
@@ -372,14 +398,17 @@ def newItem(category_id):
 	else:
 		return render_template('newItem.html', category_id=category_id)
 
+#Create a route and method to 'EDIT' an item record.
 @app.route('/category/<int:category_id>/item/<int:item_id>/edit/',
 	methods = ['GET','POST'])
 def editItem(category_id, item_id):
+	#Check if user is logged in
 	if 'username' not in login_session:
 		return redirect('/login')
 
 	edittedItem = session.query(Item).filter_by(id=item_id).one()
 	category = session.query(Category).filter_by(id=category_id).one()
+	#Check if user is category owner.
 	if login_session['user_id'] != category.user_id:
 		return "<script>function myFunction() {alert('You are not authorized to edit items in this category. Please create your own category in order to edit items.');}</script><body onload='myFunction()''>"
 	if request.method == 'POST':
@@ -394,14 +423,17 @@ def editItem(category_id, item_id):
 		return render_template('editItem.html', category_id=category_id,
 			item = edittedItem)
 
+#Create a route and method to 'DELETE' an item record.
 @app.route('/category/<int:category_id>/item/<int:item_id>/delete/',
 	methods = ['GET', 'POST'])
 def deleteItem(category_id, item_id):
+	#Check if user is logged in.
 	if 'username' not in login_session:
 		return redirect('/login')
 				
 	itemToDelete = session.query(Item).filter_by(id=item_id).one()
 	category = session.query(Category).filter_by(id=category_id).one()
+	#Check if user is category owner.
 	if login_session['user_id'] != category.user_id:
 		return "<script>function myFunction() {alert('You are not authorized to delete items from this category. Please create your own category to delete items.');}</script><body onload='myFunction()''>"
 	if request.method == 'POST':
@@ -412,6 +444,7 @@ def deleteItem(category_id, item_id):
 		return render_template('deleteItem.html', category_id=category_id,
 			item=itemToDelete)
 
+#ALL API ENDPOINT JSON AND XML-ATOM
 #Create a JSON endpoint for all categories
 @app.route('/categories/JSON/')
 def showCategoriesJSON():
@@ -449,6 +482,7 @@ def showSingleItemXML(category_id, item_id):
 	item = session.query(Item).filter_by(id=item_id).one()
 	return render_template('singleItem.xml', item=item)
 
+#ALL USER INFO METHODS
 #Returns a user id for a registered user email in DB
 def getUserID(email):
 	try:
@@ -474,5 +508,5 @@ def createUser(login_session):
 #if __name__ == '__main__':
 app.secret_key = 'super_secret_key'
 app.debug = True
-#app.run(host = '0.0.0.0', port = 8000)
+#	app.run(host = '0.0.0.0', port = 8000)
 

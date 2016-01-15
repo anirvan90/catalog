@@ -1,18 +1,23 @@
 {% extends "main.html" %}
 {% block content %}
+	<div class='row text-center'>
 	<h1>{{category.name}}</h1>
+</div>
 
 	{% for i in item %}
 	<div class='row'>
 	<div class='col-md-2'>
+
+		<img src="http://placehold.it/200x100">
 	</div>
-	<div class='col-md-10'>	
+	<div class='col-md-9 col-md-offset-1'>	
 		<h4>{{i.name}}</h4>
 	</br>
 		<h6>{{i.description}}</h6>
 
 	</div>
 </div>
+</br>
 	{% endfor %}
 	</br>
 	
