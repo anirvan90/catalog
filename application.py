@@ -30,7 +30,7 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Catalog App"
 
 #Connect to DB
-engine = create_engine('postgres://nbrdfikhplpwoi:3-GoHXjocuGOmxJL4VrwxVusfu@ec2-54-83-52-144.compute-1.amazonaws.com:5432/dam7n2m3mdhpo9')
+engine = create_engine('sqlite:///itemcatalogwithusers.db')
 Base.metadata.bind = engine
 
 
@@ -506,8 +506,8 @@ def createUser(login_session):
 	user = session.query(User).filter_by(email=login_session['email']).one()
 	return user.id
 
-#if __name__ == '__main__':
-app.secret_key = 'super_secret_key'
-app.debug = True
-#	app.run(host = '0.0.0.0', port = 8000)
+if __name__ == '__main__':
+	app.secret_key = 'super_secret_key'
+	app.debug = True
+	app.run(host = '0.0.0.0', port = 8000)
 
