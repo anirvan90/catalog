@@ -58,13 +58,13 @@ class Item(Base):
 		}
 
 #Create Table to store Item Images		
-class ItemImage(Base, Image):
-	__tablename__='item_image'
+#class ItemImage(Base, Image):
+#	__tablename__='item_image'
 
-	item_id = Column(Integer, ForeignKey('item.id'), primary_key = True)
-	item = relationship(Item)
+#	item_id = Column(Integer, ForeignKey('item.id'), primary_key = True)
+#	item = relationship(Item)
 
 
 
-engine = create_engine('postgres://nbrdfikhplpwoi:3-GoHXjocuGOmxJL4VrwxVusfu@ec2-54-83-52-144.compute-1.amazonaws.com:5432/dam7n2m3mdhpo9')
+engine = create_engine('sqlite:///itemcatalogwithusers.db')
 Base.metadata.create_all(engine)
